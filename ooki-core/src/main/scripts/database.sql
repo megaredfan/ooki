@@ -99,6 +99,12 @@ create table monster(
   playerId bigint not null
 );
 
+drop table if exists monsterEgg;
+create table monsterEgg(
+  eggId bigint auto_increment primary key,
+  rareLevel int default 0
+);
+
 drop table if exists monsterFactory;
 create table monsterFactory(
   factoryId bigint auto_increment primary key,
