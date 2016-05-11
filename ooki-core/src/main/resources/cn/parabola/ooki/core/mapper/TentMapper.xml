@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.parabola.ooki.core.mapper.TentMapper">
+    <resultMap id="tentMap" type="cn.parabola.ooki.core.model.Tent">
+        <id property="tentId" column="tentId" />
+        <result property="level" column="level" />
+        <result property="capacity" column="capacity" />
+        <result property="recoverIndex" column="recoverIndex" />
+        <result property="position" column="position" />
+        <result property="status" column="status" />
+        <result property="playerId" column="playerId" />
+    </resultMap>
+
+    <insert id="insert" parameterType="cn.parabola.ooki.core.model.Tent">
+        <![CDATA[
+            insert into tent(tentId, level, capacity, recoverIndex, position, status, playerId)
+            values(#{tentId}, #{level}, #{capacity}, #{recoverIndex}, #{position}, #{status}, #{playerId});
+        ]]>
+    </insert>
+
+    <update id="update" parameterType="cn.parabola.ooki.core.model.Tent">
+        <![CDATA[
+            update tent set level=#{level}, capacity=#{capacity}, recoverIndex=#{recoverIndex}, position=#{position}, status=#{status},playerId=#{playerId}
+            where tentId = #{tentId};
+        ]]>
+    </update>
+
+    <delete id="delete" parameterType="long">
+        <![CDATA[
+            delete from tent where tentId = #{0};
+        ]]>
+    </delete>
+
+    <select id="select" parameterType="long" resultMap="tentMap">
+        <![CDATA[
+            select * from tent where tentId = #{0};
+        ]]>
+    </select>
+
+    <select id="selectAll" resultMap="tentMap">
+        <![CDATA[
+            select * from tent;
+        ]]>
+    </select>
+
+    <select id="selectByRange" resultMap="tentMap">
+        <![CDATA[
+            select * from tent limit #{0},#{1};
+        ]]>
+    </select>
+
+    <select id="count" resultType="int">
+        <![CDATA[
+            select count(*) from tent;
+        ]]>
+    </select>
+</mapper>

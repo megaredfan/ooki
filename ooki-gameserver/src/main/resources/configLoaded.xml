@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configloaded>
+    <status>0</status><!-- 0表示尚未开始读取，1表示读取成功，2表示读取失败 -->
+</configloaded>

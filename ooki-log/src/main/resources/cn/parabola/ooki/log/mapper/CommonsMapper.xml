@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.parabola.ooki.log.mapper.CommonsMapper">
+    <select id="executeSql" parameterType="cn.parabola.ooki.log.model.SqlAdapter">
+	     <![CDATA[
+	     	${sql}
+	     ]]>
+	</select>
+	<select id="executeSqlWithResult" parameterType="cn.parabola.ooki.log.model.SqlAdapter" resultType="int">
+	     <![CDATA[
+	     	${sql}
+	     ]]>
+	</select>
+	
+	<resultMap id="loginMap" type="cn.parabola.ooki.log.model.LoginLog">
+		<id property="id" column="id" />
+		<result property="playerId" column="playerId" />
+		<result property="loginTime" column="loginTime" />
+		<result property="registerTime" column="registerTime" />
+		<result property="platformType" column="platformType" />
+		<result property="deviceType" column="deviceType" />
+	</resultMap>
+	<resultMap id="playerMap" type="cn.parabola.ooki.log.model.PlayerLog">
+		<id property="id" column="id" />
+		<result property="playerId" column="playerId" />
+		<result property="actionTime" column="actionTime" />
+		<result property="messageType" column="messageType" />
+		<result property="content" column="content" />
+		<result property="amount" column="amount" />
+		<result property="currency" column="currency" />
+		<result property="mold" column="mold" />
+		<result property="islog" column="islog" />
+		<result property="platformType" column="platformType" />
+		<result property="deviceType" column="deviceType" />
+		<result property="messageEnum" column="messageEnum" />
+		<result property="step" column="step" />
+	</resultMap>
+	<resultMap id="adminMap" type="cn.parabola.ooki.log.model.AdminLog">
+		<id property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="ip" column="ip" />
+		<result property="actionTime" column="actionTime" />
+		<result property="content" column="content" />
+	</resultMap>
+	<resultMap id="messageMap" type="cn.parabola.ooki.log.model.MessageLog">
+		<id property="id" column="id" />
+		<result property="playerId" column="playerId" />
+		<result property="messageType" column="messageType" />
+		<result property="beginTime" column="beginTime" />
+		<result property="endTime" column="endTime" />
+		<result property="useTime" column="useTime" />
+	</resultMap>
+	
+	<select id="getLoginCount" parameterType="string" resultType="long">
+	     <![CDATA[
+	     	select count(DISTINCT playerId) from login_log_date
+	     ]]>
+	</select>
+	<select id="getDayLoginPlayerId" parameterType="string" resultMap="loginMap">
+	     <![CDATA[
+	     	select DISTINCT playerId from login_log_date
+	     ]]>
+	</select>
+	
+	<select id="getPlayerLog" parameterType="string" resultMap="playerMap">
+	     <![CDATA[
+	     	select * from player_log_date
+	     ]]>
+	</select>
+	
+	<select id="getPlayerCount" parameterType="java.util.Map" resultType="int">  
+	     	select count(DISTINCT playerId) from ${tableName} where messageType = #{messageType}  
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getShareCountByType" parameterType="java.util.Map" resultType="int">  
+	     	select count(DISTINCT playerId) from ${tableName} where messageType = #{messageType} and step =#{step}
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getStepCountByType" parameterType="java.util.Map" resultType="int">  
+	     	select count(DISTINCT playerId) from ${tableName} where messageType = #{messageType} and step =#{step}
+	</select>
+	
+	<select id="getPlayerIdByStep" parameterType="java.util.Map" resultType="String">  
+	     	select DISTINCT playerId from ${tableName} where messageType = #{messageType} and step =#{step}
+	</select>
+	
+	<select id="getStepCountByAll" parameterType="java.util.Map" resultType="int">
+		 <![CDATA[
+	     	select count(DISTINCT playerId) from ${tableName} where messageType = #{messageType} and step < 140 and step > -1
+	     ]]>
+	</select>	
+	
+	<select id="getShareCount" parameterType="java.util.Map" resultType="int">  
+	     	select count(*) from ${tableName} where messageType = #{messageType} and step =#{step}
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getShareCountByBoby" parameterType="java.util.Map" resultType="int">  
+	     	select count(*) from ${tableName} where messageType = #{messageType} and step =#{step}
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	     	<if test="playerId!=0">
+	     		and playerId = #{playerId}
+	     	</if>
+	</select>
+	
+	<select id="getPlayerPassCount" parameterType="java.util.Map" resultType="int">  
+	     	select count(DISTINCT playerId) from ${tableName} where messageType = #{messageType}  and step = 70
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getPlayerCountByHour" parameterType="java.util.Map" resultType="int">  
+	     	select count(DISTINCT playerId) from ${tableName} where messageType = #{messageType} and actionTime between #{startDate} and #{endDate} 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getPlayerPassCountByHour" parameterType="java.util.Map" resultType="int">  
+	     	select count(DISTINCT playerId) from ${tableName} where messageType = #{messageType}  and step = 70 and actionTime between #{startDate} and #{endDate} 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getLoginCountForDays" parameterType="java.util.Map" resultType="int">	     
+	     	select count(DISTINCT playerId) from ${tableName} where str_to_date(registerTime,'%Y-%c-%d') = #{dateTime} and playerId not in(-1) 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if> 
+	</select>
+	
+	<select id="getLoginCountByToday" parameterType="java.util.Map" resultType="int">    
+	     	select count(DISTINCT playerId) from ${tableName} where 1=1 and playerId not in(-1) 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getUserLoginCountByToday" parameterType="java.util.Map" resultType="int">    
+	     	select count(DISTINCT playerId) from ${tableName} where 1=1 and playerId not in(-1) 
+	     	and playerId not in(
+		     	select DISTINCT playerId from ${tableName} where messageType = #{messageType}  
+		     	<if test="platformType!=0">
+		     		and platformType = #{platformType}
+		     	</if>
+	     	)  
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getUserLoginListByToday" parameterType="java.util.Map" resultMap ="playerMap">    
+	     	select DISTINCT playerId from ${tableName} where 1=1 and playerId not in(-1) 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getNewUserListByToday" parameterType="java.util.Map" resultMap ="playerMap">    
+	     	select DISTINCT playerId from ${tableName} where messageType = #{messageType}  
+		     	<if test="platformType!=0">
+		     		and platformType = #{platformType}
+		     	</if>
+	</select>
+	
+	
+	<select id="getLoginCountByHour" parameterType="java.util.Map" resultType="int">    
+	     	select count(DISTINCT playerId) from ${tableName} where 1=1 and playerId not in(-1) and loginTime between #{startDate} and #{endDate} 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getLoginCountByDown" parameterType="java.util.Map" resultType="int">    
+	     	select count(*) from ${tableName} where playerId = -1  
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getLoginCountByDownForHour" parameterType="java.util.Map" resultType="int">    
+	     	select count(*) from ${tableName} where playerId = -1 and loginTime between #{startDate} and #{endDate} 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getPayUserCount" parameterType="java.util.Map" resultType="int">    
+	     	select count(DISTINCT playerId) from ${tableName} where 1=1 and resultCode = 1
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getPayByDiamonds" parameterType="java.util.Map" resultType="int">    
+	     	select ifnull(sum(diamond),0) from ${tableName} where 1=1 and resultCode = 1
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getPayByDiamondsByBody" parameterType="java.util.Map" resultType="int">    
+	     	select ifnull(sum(diamond),0) from ${tableName} where 1=1 and resultCode = 1
+	     	<if test="playerId!=0">
+	     		and playerId = #{playerId}
+	     	</if>
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getPayByAmounts" parameterType="java.util.Map" resultType="int">    
+	     	select ifnull(sum(amount),0) from ${tableName} where 1=1 and resultCode = 1
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getPayByAmountsByBody" parameterType="java.util.Map" resultType="int">    
+	     	select ifnull(sum(amount),0) from ${tableName} where 1=1 and resultCode = 1
+	     	<if test="playerId!=0">
+	     		and playerId = #{playerId}
+	     	</if>
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+		
+	<select id="getPlayerLogByDateAndId" resultMap="playerMap">
+	     	select * from ${param1} where playerId = #{1} order by id asc limit #{3} offset #{2} 
+	</select>
+	
+	<select id="getPlayerLogByDateAndIdCount" resultType="int">    
+	     	select count(*) from ${param1} where playerId = #{1}
+	</select>
+	
+	<select id="getPlayerLogByAmount" resultType="int">
+		<![CDATA[	     
+	     	select ifnull(sum(amount),0) from ${param1} where currency = #{1} and mold = #{2}
+	  	 ]]>
+	</select>
+	
+	<select id="getPlayerLogByAmountType" resultType="int">
+		<![CDATA[	     
+	     	select ifnull(sum(amount),0) from ${param1} where currency = #{1} and mold = #{2} and platformType=#{3}
+	  	 ]]>
+	</select>
+	
+	<select id="getPlayerLogByAmountBoby" resultType="int">
+		<![CDATA[	     
+	     	select ifnull(sum(amount),0) from ${param1} where currency = #{1} and mold = #{2} and playerId=#{3} and messageEnum=#{4}
+	  	 ]]>
+	</select>
+	
+	<select id="getAdminLogByDate" parameterType="string" resultMap="adminMap">
+	     <![CDATA[
+	     	select * from admin_log_date
+	     ]]>
+	</select>
+
+	<select id="getMessageLogByDate" parameterType="string" resultMap="messageMap">
+	     <![CDATA[
+	     	select * from message_log_date
+	     ]]>
+	</select>
+	
+	<select id="getLoginCountForToday" parameterType="java.util.Map" resultType="int">
+			SELECT count(DISTINCT playerId) FROM ${tableNameToday}  where playerId in (select DISTINCT playerId from ${tableName} where messageType = #{messageType})  
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getLoginListByPlayer1" parameterType="java.util.Map" resultType="String">
+			SELECT DISTINCT playerId FROM ${tableNameToday}  where 1 = 1 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<select id="getLoginListByPlayer2" parameterType="java.util.Map" resultType="String">
+			select DISTINCT playerId from ${tableName} where messageType = #{messageType} 
+	     	<if test="platformType!=0">
+	     		and platformType = #{platformType}
+	     	</if>
+	</select>
+	
+	<insert id="recordLogin" parameterType="cn.parabola.ooki.log.model.LoginLog">
+	    <![CDATA[
+	    	insert into login_log_template(playerId, loginTime, registerTime, platformType, deviceType) values(#{playerId},#{loginTime},#{registerTime},#{platformType},#{deviceType})
+	    ]]>
+	</insert>
+	
+	<insert id="recordPlayer" parameterType="cn.parabola.ooki.log.model.PlayerLog">
+	    <![CDATA[
+	    	insert into player_log_template(playerId, actionTime, messageType, content, amount, currency, mold, islog, platformType, deviceType, messageEnum,step) 
+	    	values (#{playerId},#{actionTime},#{messageType},#{content},#{amount},#{currency},#{mold},#{islog},#{platformType},#{deviceType},#{messageEnum},#{step})
+	    ]]>
+	</insert>
+	
+	<insert id="recordAdmin" parameterType="cn.parabola.ooki.log.model.AdminLog">
+	    <![CDATA[
+	    	insert into admin_log_template(name, ip, actionTime, content) values(#{name},#{ip},#{actionTime},#{content})
+	    ]]>
+	</insert>
+	
+	<insert id="recordMessage" parameterType="cn.parabola.ooki.log.model.MessageLog">
+	    <![CDATA[
+	    	insert into message_log_template(playerId, messageType, beginTime, endTime, useTime) values(#{playerId},#{messageType},#{beginTime},#{endTime},#{useTime})
+	    ]]>
+	</insert>
+</mapper>

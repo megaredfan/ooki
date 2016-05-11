@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.parabola.ooki.core.mapper.AccountMapper">
+	
+	<resultMap id="accountMap" type="cn.parabola.ooki.core.model.Account">
+		<id property="id" column="id" />
+		<result property="account" column="account" />
+		<result property="platformType" column="platformType" />
+		<result property="playerId" column="playerId" />
+	</resultMap>
+	<select id="getAccount" resultMap="accountMap">
+	    <![CDATA[
+	    	select * from game_account where account = #{0} and platformType = #{1}
+	    ]]>
+	</select>
+	<insert id="addAccount" parameterType="cn.parabola.ooki.core.model.Account">
+	    <![CDATA[
+	    	insert into game_account(id,account,platformType,playerId) values(#{id},#{account},#{platformType},#{playerId})
+	    ]]>
+	</insert>
+	<delete id="delAccount" parameterType="int">
+		<![CDATA[
+			delete from game_account where id=#{id}
+		]]>
+	</delete>
+</mapper>

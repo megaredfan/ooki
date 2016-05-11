@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:p="http://www.springframework.org/schema/p" 
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd 
+		http://www.springframework.org/schema/aop 
+        http://www.springframework.org/schema/aop/spring-aop-2.0.xsd">
+
+	<context:component-scan base-package="cn.parabola.ooki.log"/>
+	<bean id="log_propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" >
+		<property name="order" value="2" />  
+        <property name="ignoreUnresolvablePlaceholders" value="true" />
+		<property name="locations">
+		    <list>
+		        <value>classpath*:log-jdbc.properties</value>
+		    </list>		
+		</property>
+	</bean> 
+
+	<bean id="dataSource_game_log" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${log.jdbc.driver}" />
+		<property name="url" value="${log.jdbc.url}" />
+		<property name="username" value="${log.jdbc.user}" />
+		<property name="password" value="${log.jdbc.password}" />
+		<property name="initialSize" value="${log.jdbc.initialSize}" />
+		<property name="maxActive" value="${log.jdbc.maxActive}" />
+		<property name="maxIdle" value="${log.jdbc.maxIdle}" />
+		<property name="minIdle" value="${log.jdbc.minIdle}" />
+		<property name="maxWait" value="${log.jdbc.maxWait}" />
+		<property name="validationQuery" value="${log.jdbc.validationQuery}" />
+		<property name="testWhileIdle" value="${log.jdbc.testWhileIdle}" />
+	</bean>
+
+	<bean id="sqlSessionFactory_game_log" name = "sqlSessionFactory_game_log" class="org.mybatis.spring.SqlSessionFactoryBean">
+	  	<property name="configLocation" value="classpath:log-mybatis-config.xml" />
+		<property name="dataSource" ref="dataSource_game_log" />
+	</bean>
+	<bean id="sqlSessionFactoryTemplate_game_log" name="sqlSessionFactoryTemplate_game_log" class="org.mybatis.spring.SqlSessionTemplate" scope="prototype">
+		<constructor-arg index="0" ref="sqlSessionFactory_game_log" />
+		<constructor-arg index="1" value="SIMPLE" />
+	</bean>
+	<bean id ="game_log_mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="cn.parabola.ooki.log.mapper" />
+		<property name="sqlSessionTemplateBeanName" value="sqlSessionFactoryTemplate_game_log" />
+	</bean>
+</beans>
