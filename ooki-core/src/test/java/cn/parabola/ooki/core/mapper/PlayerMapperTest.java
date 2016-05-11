@@ -37,7 +37,7 @@ public class PlayerMapperTest {
 
 		Player p = pm.select(playerId);
 		Assert.assertEquals("player", p.getPlayerName());
-		Assert.assertEquals(playerId,p.getPlayerId());
+		Assert.assertEquals(playerId, (long) p.getPlayerId());
 
 
 		p.setFeed(12);
