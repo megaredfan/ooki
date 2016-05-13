@@ -30,8 +30,11 @@ public class ChatLogic {
 	@Resource(name = "configLogic")
 	private ConfigLogic configLogic;
 	private String tokenUrl = "https://api.gotye.com.cn/api/accessToken";
-	
-	private String sercetKey = "df3f9aed-d4b9-45f3-9f88-007b8d23089f";
+
+
+	//todo:申请新的亲加账户
+	//private String sercetKey = "df3f9aed-d4b9-45f3-9f88-007b8d23089f";
+	private String sercetKey = "";
 	private long expireTime;
 	
 	//在redis中存储世界聊天id的key

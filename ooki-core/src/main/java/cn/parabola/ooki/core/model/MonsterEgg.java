@@ -6,6 +6,7 @@ package cn.parabola.ooki.core.model;
 public class MonsterEgg {
     private Long eggId;
     private int rareLevel;
+    private Long playerId;
 
     public Long getEggId() {
         return eggId;
@@ -23,11 +24,20 @@ public class MonsterEgg {
         this.rareLevel = rareLevel;
     }
 
+    public Long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
+    }
+
     @Override
     public String toString() {
         return "MonsterEgg{" +
                 "eggId=" + eggId +
                 ", rareLevel=" + rareLevel +
+                ", playerId=" + playerId +
                 '}';
     }
 }
