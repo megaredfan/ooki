@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.parabola.ooki.core.mapper.MonsterEggMapper">
+    <resultMap id="monsterEggMap" type="cn.parabola.ooki.core.model.MonsterEgg">
+        <id property="eggId" column="eggId" />
+        <result property="rareLevel" column="rareLevel" />
+        <result property="playerId" column="playerId" />
+    </resultMap>
+    <select id="select" parameterType="int" resultMap="monsterEggMap">
+        <![CDATA[
+            select * from monsterEgg where eggId = #{0};
+        ]]>
+    </select>
+    <select id="selectAll" resultMap="monsterEggMap">
+        <![CDATA[
+            select * form monsterEgg;
+        ]]>
+    </select>
+    <select id="selectByRange" resultMap="monsterEggMap">
+        <![CDATA[
+            select * form monsterEgg limit #{0},#{1};
+        ]]>
+    </select>
+    <select id="count" resultType="int">
+        <![CDATA[
+            select count(*) form monsterEgg;
+        ]]>
+    </select>
+    <insert id="insert" parameterType="cn.parabola.ooki.core.model.MonsterEgg">
+        <![CDATA[
+            insert into monsterEgg(eggId, rareLevel, playerId)
+            values(#{eggId},#{rareLevel},#{playerId});
+        ]]>
+    </insert>
+    <update id="update" parameterType="cn.parabola.ooki.core.model.MonsterEgg">
+        <![CDATA[
+            update monsterEgg set rareLevel=#{rareLevel},playerId=#{playerId}
+            where eggId=#{eggId};
+        ]]>
+    </update>
+    <delete id="delete" parameterType="long">
+        <![CDATA[
+            delete from monsterEgg where eggId = #{0};
+        ]]>
+    </delete>
+</mapper>
